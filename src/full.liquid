@@ -94,6 +94,7 @@
     </span>
     <span class="value value--xsmall value--tnums">{{ system.uptime | divided_by: 3600 | round: 1 }}h</span>
   </div>
+  
 </div>
 
       <!-- Two Column Layout: Chart on Left, Domains on Right -->
@@ -163,21 +164,29 @@
 
     </div>
 
-   <div class="title_bar">
+<div class="title_bar">
   <div class="flex flex--center-y">
-    <img class="image" src="https://pi.hole/api/docs/images/logo.svg" />
+    <img class="image image-dither rounded" src="https://pi.hole/api/docs/images/logo.svg" style="height: 24px; margin-right: 8px;" />
+    
     <span class="title">Pi-hole</span>
-    <span class="label label--small label--inverted ml--2">
-    {{ host_info.model | replace: 'Raspberry Pi', 'RPi' | replace: 'Model B Plus Rev 1.3', '3B+' }}
-  </span>
+    
+   
   </div>
   
-  <span class="instance"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+  <span class="instance">
+    <span class="label label--outline">
+      {{ host_data.uname.nodename }}
+    </span>
+    &nbsp;
+      
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
       <circle cx="9" cy="7" r="4"></circle>
       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-    </svg>{{ stats.clients.active }} Clients · Updated {{ "now" | date: '%s' | plus: trmnl.user.utc_offset | date: "%H:%M" }}</span>
+    </svg>
+    {{ stats.clients.active }} Clients · Updated {{ "now" | date: "%H:%M" }}
+  </span>
 </div>
 
 
