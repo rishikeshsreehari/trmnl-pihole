@@ -101,10 +101,10 @@
         </div>
 
         <!-- Right Column: Top Blocked Domains -->
-        <div class="column">
-          <span class="label label--medium group-header" data-group-header="true">Top Blocked</span>
+        <div class="column" data-overflow="true" data-overflow-max-height="220">
+          <span class="label label--medium mb--2">Top Blocked</span>
           {% if top_data %}
-            {% for d in top_data limit:10 %}
+            {% for d in top_data limit:15 %}
               <div class="item">
                 <div class="meta"></div>
                 <div class="content">
