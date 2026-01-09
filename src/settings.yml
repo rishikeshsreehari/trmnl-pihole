@@ -1,0 +1,25 @@
+---
+name: Pi-hole
+strategy: polling
+refresh_interval: 60
+
+polling_url: |
+  {{ base_url }}/api/stats/summary
+  {{ base_url }}/api/info/system
+  {{ base_url }}/api/info/sensors
+  {{ base_url }}/api/history
+  {{ base_url }}/api/stats/top_domains
+
+
+polling_verb: GET
+polling_headers: ""
+
+no_screen_padding: 'no'
+dark_mode: 'no'
+
+custom_fields:
+  - keyname: base_url
+    name: Pi-hole Base URL
+    field_type: text
+    required: true
+    placeholder: "http://192.168.1.72"
