@@ -1,0 +1,60 @@
+{% assign stats = IDX_0 %}
+{% assign host_data = IDX_5.host %}
+
+<div class="layout layout--col">
+  
+  <!-- Row 1 -->
+  <div class="item mb--4">
+    <div class="meta"></div>
+    <div class="content">
+      <span class="value value--tnums">{{ stats.queries.total | divided_by: 1000.0 | round: 1 }}k</span>
+      <span class="label label--gray">Requests</span>
+    </div>
+    <div class="meta"></div>
+    <div class="content">
+      <span class="value value--tnums">{{ stats.queries.blocked | number_with_delimiter }}</span>
+      <span class="label label--gray">Blocked</span>
+    </div>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="item">
+    <div class="meta"></div>
+    <div class="content">
+      <span class="value value--tnums">{{ stats.queries.percent_blocked | round: 1 }}%</span>
+      <span class="label label--gray">% Blocked</span>
+    </div>
+    <div class="meta"></div>
+    <div class="content">
+      <span class="value value--tnums">{{ stats.queries.frequency | round: 2 }}q/s</span>
+      <span class="label label--gray">Frequency</span>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="title_bar">
+  <div class="flex flex--center-y">
+    <img class="image" src="https://wp-cdn.pi-hole.net/wp-content/uploads/2016/12/Vortex-R.png" style="height: 24px; margin-right: 8px;" />
+    
+    <span class="title">Pi-hole</span>
+    
+   
+  </div>
+  
+  <span class="instance">
+    <span class="label">
+      {{ host_data.uname.nodename }}·
+    </span>
+    
+      
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+      <circle cx="9" cy="7" r="4"></circle>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+    </svg>
+    {{ stats.clients.active }}  ·  {{ "now" | date: "%H:%M" }}
+  </span>
+</div>
