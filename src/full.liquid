@@ -6,95 +6,123 @@
 {% assign chart_id = "pihole-chart" | append_random %}
 
 <script src="https://usetrmnl.com/js/highcharts/12.3.0/highcharts.js"></script>
+<script src="https://usetrmnl.com/js/highcharts/12.3.0/pattern-fill.js"></script>
 
 <div class="screen">
   <div class="view view--full">
-    <div class="layout layout--col gap--space-between">
+    <div class="layout layout--col">
 
       <!-- Top 4 Metrics -->
-      <div class="item mb--4">
+      <div class="item mb--5">
         <div class="meta"></div>
         <div class="content">
           <span class="value value--tnums">{{ stats.queries.total | divided_by: 1000.0 | round: 1 }}k</span>
-          <span class="label label--small label--gray">Requests</span>
+          <span class="label label--gray">Requests</span>
         </div>
         <div class="meta"></div>
         <div class="content">
           <span class="value value--tnums">{{ stats.queries.blocked | number_with_delimiter }}</span>
-          <span class="label label--small label--gray">Blocked</span>
+          <span class="label label--gray">Blocked</span>
         </div>
         <div class="meta"></div>
         <div class="content">
           <span class="value value--tnums">{{ stats.queries.percent_blocked | round: 1 }}%</span>
-          <span class="label label--small label--gray">% Blocked</span>
+          <span class="label label--gray">% Blocked</span>
         </div>
         <div class="meta"></div>
         <div class="content">
           <span class="value value--tnums">{{ stats.queries.unique_domains | divided_by: 1000.0 | round: 1 }}k</span>
-          <span class="label label--small label--gray">Unique Domains</span>
+          <span class="label label--gray">Unique Domains</span>
         </div>
       </div>
 
-      <!-- Bottom: Chart + Domains Table -->
-      <div class="columns">
-        <!-- Left Column: System Stats + Chart -->
-        <div class="column">
-          <!-- System Info -->
-          <div class="grid grid--cols-4 mb--3">
-            <div class="flex flex--col gap--xsmall">
-              <span class="value value--xsmall value--tnums">{{ sensors.cpu_temp | round: 1 }}°{{ sensors.unit }}</span>
-              <span class="label label--xsmall label--gray">Temp</span>
-            </div>
-            <div class="flex flex--col gap--xsmall">
-              <span class="value value--xsmall value--tnums">{{ system.cpu.load.percent[0] | round: 1 }}%</span>
-              <span class="label label--xsmall label--gray">CPU</span>
-            </div>
-            <div class="flex flex--col gap--xsmall">
-              <span class="value value--xsmall value--tnums">{{ system.memory.ram["%used"] | round: 1 }}%</span>
-              <span class="label label--xsmall label--gray">RAM</span>
-            </div>
-            <div class="flex flex--col gap--xsmall">
-              <span class="value value--xsmall value--tnums">{{ system.uptime | divided_by: 3600 | round: 1 }}h</span>
-              <span class="label label--xsmall label--gray">Uptime</span>
-            </div>
+      <!-- System Stats Row -->
+      <div class="grid grid--cols-4 mb--4">
+        <div class="flex flex--col gap--xsmall">
+          <div class="flex flex--row gap--xsmall flex--center-y">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1h-1v1h1v2h-1v1h1v2h-2V5z"/>
+            </svg>
+            <span class="value value--xsmall value--tnums">{{ sensors.cpu_temp | round: 1 }}°{{ sensors.unit }}</span>
           </div>
+          <span class="label label--small label--gray">Temp</span>
+        </div>
+        <div class="flex flex--col gap--xsmall">
+          <div class="flex flex--row gap--xsmall flex--center-y">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+            </svg>
+            <span class="value value--xsmall value--tnums">{{ system.cpu.load.percent[0] | round: 1 }}%</span>
+          </div>
+          <span class="label label--small label--gray">CPU</span>
+        </div>
+        <div class="flex flex--col gap--xsmall">
+          <div class="flex flex--row gap--xsmall flex--center-y">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+            </svg>
+            <span class="value value--xsmall value--tnums">{{ system.memory.ram["%used"] | round: 1 }}%</span>
+          </div>
+          <span class="label label--small label--gray">RAM</span>
+        </div>
+        <div class="flex flex--col gap--xsmall">
+          <div class="flex flex--row gap--xsmall flex--center-y">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+            </svg>
+            <span class="value value--xsmall value--tnums">{{ system.uptime | divided_by: 3600 | round: 1 }}h</span>
+          </div>
+          <span class="label label--small label--gray">Uptime</span>
+        </div>
+      </div>
 
-          <!-- Chart -->
-          <div id="{{ chart_id }}" style="width: 100%;"></div>
+      <!-- Two Column Layout: Chart on Left, Domains on Right -->
+      <div class="columns">
+        
+        <!-- Left Column: Chart -->
+        <div class="column">
+          <div id="{{ chart_id }}" style="width: 100%; height: 180px;"></div>
           
-          <!-- Chart Legend - Centered -->
+          <!-- Chart Legend -->
           <div class="flex gap--medium mt--2" style="justify-content: center;">
             <span class="label label--small flex flex--center-y gap--xsmall">
               <div class="w--3 h--3 bg--black"></div>
               Blocked
             </span>
             <span class="label label--small flex flex--center-y gap--xsmall">
-              <div class="w--3 h--3 bg--gray-45"></div>
-              Permitted
+              <div class="w--3 h--3 bg--gray-3"></div>
+              Cached
+            </span>
+            <span class="label label--small flex flex--center-y gap--xsmall">
+              <div class="w--3 h--3 bg--gray-5"></div>
+              Forwarded
             </span>
           </div>
         </div>
 
         <!-- Right Column: Top Blocked Domains -->
-        <div class="column pl--4 pr--2">
-          <span class="label mb--2 block">Top Blocked Domains</span>
-          <table class="table table--condensed">
-            <tbody>
-              {% if top_data %}
-                {% for d in top_data limit:10 %}
-                  <tr>
-                    <td style="width: 60%; padding-right: 8px;"><span class="label label--small" data-clamp="1">{{ d.domain }}</span></td>
-                    <td style="width: 40%; text-align: right; padding-right: 12px;"><span class="label label--small">{{ d.count }}</span></td>
-                  </tr>
-                {% endfor %}
-              {% else %}
-                <tr>
-                  <td><span class="label label--small">No data available</span></td>
-                </tr>
-              {% endif %}
-            </tbody>
-          </table>
+        <div class="column">
+          <span class="label label--medium group-header" data-group-header="true">Top Blocked</span>
+          {% if top_data %}
+            {% for d in top_data limit:10 %}
+              <div class="item">
+                <div class="meta"></div>
+                <div class="content">
+                  <span class="title title--small" data-clamp="1">{{ d.domain }}</span>
+                  <span class="description">{{ d.count }} requests</span>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="item">
+              <div class="meta"></div>
+              <div class="content">
+                <span class="title title--small">No data available</span>
+              </div>
+            </div>
+          {% endif %}
         </div>
+
       </div>
 
     </div>
@@ -102,12 +130,7 @@
     <!-- Title Bar -->
     <div class="title_bar">
       <span class="title">Pi-hole</span>
-      <span class="instance">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-        </svg>
-        {{ stats.clients.active }} Clients · Updated {{ "now" | date: "%H:%M" }}
-      </span>
+      <span class="instance">{{ stats.clients.active }} Clients · Updated {{ "now" | date: "%H:%M" }}</span>
     </div>
 
   </div>
@@ -120,20 +143,25 @@
     {% for h in history limit:24 %}
       var timestamp = new Date({{ h.timestamp | times: 1000 }});
       var hour = timestamp.getHours();
+      var minute = timestamp.getMinutes();
+      var timeLabel = hour + ":" + (minute < 10 ? "0" : "") + minute;
+      
       chartData.push({
-        name: hour + ":00",
+        name: timeLabel,
         blocked: {{ h.blocked }},
-        permitted: {{ h.total | minus: h.blocked }}
+        cached: {{ h.cached }},
+        forwarded: {{ h.forwarded }}
       });
     {% endfor %}
 
     var blockedData = chartData.map(function(d) { return [d.name, d.blocked]; });
-    var permittedData = chartData.map(function(d) { return [d.name, d.permitted]; });
+    var cachedData = chartData.map(function(d) { return [d.name, d.cached]; });
+    var forwardedData = chartData.map(function(d) { return [d.name, d.forwarded]; });
 
     Highcharts.chart("{{ chart_id }}", {
       chart: {
         type: "column",
-        height: 220,
+        height: 180,
         width: null,
         animation: false,
         spacing: [10, 10, 5, 10]
@@ -157,11 +185,30 @@
       series: [{
         name: "Blocked",
         data: blockedData,
-        color: "#000000"
+        color: "#000000",
+        zIndex: 3
       }, {
-        name: "Permitted",
-        data: permittedData,
-        color: "#CCCCCC"
+        name: "Cached",
+        data: cachedData,
+        zIndex: 2,
+        color: {
+          pattern: {
+            image: "https://usetrmnl.com/images/grayscale/gray-3.png",
+            width: 12,
+            height: 12
+          }
+        }
+      }, {
+        name: "Forwarded",
+        data: forwardedData,
+        zIndex: 1,
+        color: {
+          pattern: {
+            image: "https://usetrmnl.com/images/grayscale/gray-5.png",
+            width: 12,
+            height: 12
+          }
+        }
       }],
       tooltip: { enabled: false },
       legend: { enabled: false },
@@ -178,9 +225,10 @@
       xAxis: {
         type: "category",
         labels: {
-          style: { fontSize: "12px", color: "#000000" },
+          style: { fontSize: "11px", color: "#000000" },
           padding: 5,
-          y: 20
+          y: 20,
+          rotation: 0
         },
         lineWidth: 0,
         tickWidth: 0,
