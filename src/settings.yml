@@ -9,6 +9,8 @@ polling_url: |
   {{ base_url }}/api/info/sensors
   {{ base_url }}/api/history
   {{ base_url }}/api/stats/top_domains
+  {{ base_url }}/api/info/host        
+
 
 
 polling_verb: GET
