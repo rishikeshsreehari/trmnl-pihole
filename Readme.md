@@ -2,7 +2,9 @@
 
 Monitor your Pi-hole network-wide ad blocker statistics on your TRMNL e-ink display.
 
-![Pi-hole TRMNL Plugin](screenshot.png)
+<img width="1652" height="990" alt="image" src="https://github.com/user-attachments/assets/3b6d0799-1c1d-467e-9b3c-ad2398dca399" />
+
+
 
 ## Features
 
@@ -219,22 +221,14 @@ rm ~/trmnl-push.log
 
 Contributions are welcome! Please feel free to submit a Pull Request or open an issue for bugs and feature requests.
 
+
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/rishikeshsreehari/trmnl-pihole/issues)
-- **Email**: hello@rishikeshs.com
-- **Website**: [rishikeshs.com](https://rishikeshs.com)
+If you find this plugin useful, consider supporting my work: [r1l.in/s](https://r1l.in/s)
+
+Need a custom TRMNL plugin for your business? I'm available for contract work. Reach out at [hello@rishikeshs.com](mailto:hello@rishikeshs.com).
+
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details
-
-## Acknowledgments
-
-- [Pi-hole](https://pi-hole.net/) - Network-wide ad blocking
-- [TRMNL](https://usetrmnl.com/) - E-ink display platform
-- Built with ❤️ by [Rishikesh Sreehari](https://rishikeshs.com)
-
----
-
-**Note**: This is a private plugin for TRMNL. You'll need to create it in your own TRMNL account following the installation instructions above.
