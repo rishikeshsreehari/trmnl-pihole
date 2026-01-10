@@ -34,8 +34,9 @@ BASE_URL=${BASE_URL:-http://localhost}
 
 # Download the script
 echo ""
-echo "📥 Downloading webhook script..."
+echo "📥 Creating webhook script..."
 SCRIPT_PATH="$HOME/push-pihole-to-trmnl.sh"
+LOG_PATH="$HOME/trmnl-push.log"
 
 cat > "$SCRIPT_PATH" << 'SCRIPT_EOF'
 #!/bin/bash
@@ -99,14 +100,19 @@ echo "✅ Script installed at $SCRIPT_PATH"
 # Test the script
 echo ""
 echo "🧪 Testing the script..."
-"$SCRIPT_PATH"
+"$SCRIPT_PATH" >> "$LOG_PATH" 2>&1
 
 if [ $? -eq 0 ]; then
     echo ""
     echo "✅ Test successful!"
+    echo ""
+    echo "Test output:"
+    cat "$LOG_PATH"
 else
     echo ""
     echo "❌ Test failed. Please check your Pi-hole and webhook URL."
+    echo "Error log:"
+    cat "$LOG_PATH"
     exit 1
 fi
 
@@ -116,22 +122,20 @@ echo "Do you want to set up automatic updates every 15 minutes? (y/n)"
 read -r SETUP_CRON
 
 if [ "$SETUP_CRON" = "y" ] || [ "$SETUP_CRON" = "Y" ]; then
-    # Check if cron job already exists
-    if crontab -l 2>/dev/null | grep -q "push-pihole-to-trmnl.sh"; then
-        echo "⚠️  Cron job already exists. Skipping..."
-    else
-        # Add to crontab
-        (crontab -l 2>/dev/null; echo "*/15 * * * * $SCRIPT_PATH >> $HOME/trmnl-push.log 2>&1") | crontab -
-        echo "✅ Cron job added! Data will push every 15 minutes."
-        echo "📝 Logs will be saved to $HOME/trmnl-push.log"
-    fi
+    # Remove any old cron jobs with wrong paths
+    crontab -l 2>/dev/null | grep -v "push-pihole-to-trmnl.sh" | crontab - 2>/dev/null
+    
+    # Add new cron job with correct path
+    (crontab -l 2>/dev/null; echo "*/15 * * * * $SCRIPT_PATH >> $LOG_PATH 2>&1") | crontab -
+    echo "✅ Cron job added! Data will push every 15 minutes."
+    echo "📝 Logs will be saved to $LOG_PATH"
 else
     echo ""
     echo "ℹ️  To manually add cron job later, run:"
     echo "   crontab -e"
     echo ""
     echo "   Then add this line:"
-    echo "   */15 * * * * $SCRIPT_PATH >> $HOME/trmnl-push.log 2>&1"
+    echo "   */15 * * * * $SCRIPT_PATH >> $LOG_PATH 2>&1"
 fi
 
 echo ""
@@ -142,7 +146,7 @@ echo ""
 echo "Your Pi-hole stats will now update on TRMNL."
 echo ""
 echo "Useful commands:"
-echo "  - View logs: tail -f ~/trmnl-push.log"
-echo "  - Test script: ~/push-pihole-to-trmnl.sh"
+echo "  - View logs: tail -f $LOG_PATH"
+echo "  - Test script: $SCRIPT_PATH"
 echo "  - Edit cron: crontab -e"
 echo ""
