@@ -92,7 +92,13 @@
       </svg>
       Uptime&nbsp;
     </span>
-    <span class="value value--xsmall value--tnums">{{ system.uptime | divided_by: 3600 | round: 1 }}h</span>
+    <span class="value value--xsmall value--tnums">
+      {% if system.uptime < 3600 %}
+        {{ system.uptime | divided_by: 60 | round: 0 }}m
+      {% else %}
+        {{ system.uptime | divided_by: 3600 | round: 1 }}h
+      {% endif %}
+    </span>
   </div>
   
 </div>
@@ -185,7 +191,7 @@
       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
     </svg>
-    {{ stats.clients.active }} Clients · Updated {{ "now" | date: "%H:%M" }}
+    {{ stats.clients.active }} Clients · Updated {{ "now" | date: '%s' | plus: trmnl.user.utc_offset | date: "%H:%M" }}
   </span>
 </div>
 

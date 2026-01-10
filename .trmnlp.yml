@@ -5,7 +5,6 @@ watch:
 
 custom_fields:
   base_url: "http://192.168.1.72"
-  api_token: ""
   refresh_interval: 60
 
 variables: {}
