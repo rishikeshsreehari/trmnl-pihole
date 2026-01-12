@@ -1,6 +1,6 @@
 # Pi-hole Plugin for TRMNL
 
-Display your Pi-hole stats on your TRMNL e-ink display.
+Display your [Pi-hole](https://pi-hole.net) stats on your TRMNL e-ink display.
 
 <img width="1652" height="990" alt="image" src="https://github.com/user-attachments/assets/3b6d0799-1c1d-467e-9b3c-ad2398dca399" />
 
@@ -14,7 +14,7 @@ Display your Pi-hole stats on your TRMNL e-ink display.
 
 ## Requirements
 
-This guide assumes you already have Pi-hole installed and running on your device.
+This guide assumes you already have [Pi-hole](https://pi-hole.net) installed and running on your device.
 
 **You'll need:**
 - A Raspberry Pi (or similar device) with Pi-hole installed
