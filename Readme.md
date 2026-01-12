@@ -29,7 +29,7 @@ Monitor your Pi-hole network-wide ad blocker statistics on your TRMNL e-ink disp
 SSH into your Pi-hole and run this one-liner:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rishikeshsreehari/trmnl-pihole/main/install.sh | bash
+bash <(curl -fsSL https://raw.githubusercontent.com/rishikeshsreehari/trmnl-pihole/main/install.sh)
 ```
 
 The installer will:
