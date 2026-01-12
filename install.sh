@@ -52,7 +52,7 @@ STATS=$(curl -s "$BASE_URL/api/stats/summary")
 SYSTEM=$(curl -s "$BASE_URL/api/info/system" | jq '{system: {cpu: {"%cpu": .system.cpu["%cpu"]}, memory: {ram: {"%used": .system.memory.ram["%used"]}}, uptime: .system.uptime}}')
 SENSORS=$(curl -s "$BASE_URL/api/info/sensors" | jq '{sensors: {cpu_temp: .sensors.cpu_temp, unit: .sensors.unit}}')
 HISTORY=$(curl -s "$BASE_URL/api/history" | jq '{history: .history[-12:]}')
-TOP_DOMAINS=$(curl -s "$BASE_URL/api/stats/top_domains" | jq '{domains: .domains[0:15]}')
+TOP_DOMAINS=$(curl -s "$BASE_URL/api/stats/top_domains?blocked=true" | jq '{domains: .domains[0:15]}')
 HOST=$(curl -s "$BASE_URL/api/info/host" | jq '{host: {uname: {nodename: .host.uname.nodename}}}')
 
 # Build payload
