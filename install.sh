@@ -225,6 +225,15 @@ echo "✅ Script installed at $SCRIPT_PATH"
 echo ""
 echo "🔧 Running initial setup to establish data structure..."
 echo ""
+echo "📝 Logging setup to: $LOG_PATH"
+echo ""
+
+# Create log file and add initial entry
+{
+echo "=========================================="
+echo "$(date '+%Y-%m-%d %H:%M:%S') - Initial Setup"
+echo "=========================================="
+echo ""
 
 # Fetch all data
 STATS=$(curl -s "$BASE_URL/api/stats/summary")
@@ -264,6 +273,7 @@ if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "201" ]; then
 fi
 
 echo "✅ Stats sent"
+echo ""
 sleep 2
 
 # Send History
@@ -293,6 +303,7 @@ if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "201" ]; then
 fi
 
 echo "✅ History sent"
+echo ""
 sleep 2
 
 # Send Domains
@@ -322,6 +333,11 @@ if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "201" ]; then
 fi
 
 echo "✅ Domains sent"
+echo ""
+echo "=========================================="
+echo "$(date '+%Y-%m-%d %H:%M:%S') - Initial Setup Complete"
+echo "=========================================="
+} | tee -a "$LOG_PATH"
 
 # Create initial state file (last sent was domains, so next will be history)
 echo "domains" > "$STATE_FILE"
@@ -389,8 +405,8 @@ echo "  - Uses deep_merge to update only changed data"
 echo "  - All output automatically logged to file"
 echo ""
 echo "Useful commands:"
+echo "  - Manual run:       $SCRIPT_PATH"
 echo "  - View logs:        tail -f $LOG_PATH"
-echo "  - Test script:      $SCRIPT_PATH"
 echo "  - Check state:      cat $STATE_FILE"
 echo "  - Edit cron:        crontab -e"
 echo "  - View cron jobs:   crontab -l"
