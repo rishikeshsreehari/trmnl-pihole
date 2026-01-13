@@ -117,7 +117,18 @@ echo "=========================================="
 
 # Always send Stats + System + Sensors + Host
 echo "Fetching stats data..."
-STATS=$(curl -s "$BASE_URL/api/stats/summary")
+STATS=$(curl -s "$BASE_URL/api/stats/summary" | jq '{
+  clients: .clients,
+  queries: {
+    total: .queries.total,
+    blocked: .queries.blocked,
+    cached: .queries.cached,
+    percent_blocked: .queries.percent_blocked
+  },
+  gravity: {
+    domains_being_blocked: .gravity.domains_being_blocked
+  }
+}')
 SYSTEM=$(curl -s "$BASE_URL/api/info/system" | jq '{
     cpu: {"%cpu": .system.cpu["%cpu"]}, 
     memory: {ram: {"%used": .system.memory.ram["%used"]}}, 
@@ -166,7 +177,7 @@ if [ "$LAST_CHART" = "domains" ]; then
     # Send History
     echo ""
     echo "Fetching history data..."
-    HISTORY=$(curl -s "$BASE_URL/api/history" | jq '{history: .history[-8:]}')
+    HISTORY=$(curl -s "$BASE_URL/api/history" | jq '{history: .history[-4:]}')
     
     HISTORY_PAYLOAD=$(cat <<EOF
 {
@@ -178,7 +189,7 @@ if [ "$LAST_CHART" = "domains" ]; then
 EOF
 )
     
-    send_payload "$HISTORY_PAYLOAD" "History Update" "IDX_3 (History - 8 data points)"
+    send_payload "$HISTORY_PAYLOAD" "History Update" "IDX_3 (History - 4 data points)"
     
     if [ $? -eq 0 ]; then
         echo "history" > "$STATE_FILE"
@@ -188,7 +199,7 @@ else
     # Send Domains
     echo ""
     echo "Fetching domains data..."
-    DOMAINS=$(curl -s "$BASE_URL/api/stats/top_domains?blocked=true" | jq '{domains: .domains[0:15]}')
+    DOMAINS=$(curl -s "$BASE_URL/api/stats/top_domains?blocked=true" | jq '{domains: .domains[0:10]}')
     
     DOMAINS_PAYLOAD=$(cat <<EOF
 {
@@ -200,7 +211,7 @@ else
 EOF
 )
     
-    send_payload "$DOMAINS_PAYLOAD" "Domains Update" "IDX_4 (Top 15 blocked domains)"
+    send_payload "$DOMAINS_PAYLOAD" "Domains Update" "IDX_4 (Top 10 blocked domains)"
     
     if [ $? -eq 0 ]; then
         echo "domains" > "$STATE_FILE"
@@ -236,12 +247,23 @@ echo "=========================================="
 echo ""
 
 # Fetch all data
-STATS=$(curl -s "$BASE_URL/api/stats/summary")
+STATS=$(curl -s "$BASE_URL/api/stats/summary" | jq '{
+  clients: .clients,
+  queries: {
+    total: .queries.total,
+    blocked: .queries.blocked,
+    cached: .queries.cached,
+    percent_blocked: .queries.percent_blocked
+  },
+  gravity: {
+    domains_being_blocked: .gravity.domains_being_blocked
+  }
+}')
 SYSTEM=$(curl -s "$BASE_URL/api/info/system" | jq '{system: {cpu: {"%cpu": .system.cpu["%cpu"]}, memory: {ram: {"%used": .system.memory.ram["%used"]}}, uptime: .system.uptime}}')
 SENSORS=$(curl -s "$BASE_URL/api/info/sensors" | jq '{sensors: {cpu_temp: .sensors.cpu_temp, unit: .sensors.unit}}')
 HOST=$(curl -s "$BASE_URL/api/info/host" | jq '{host: {uname: {nodename: .host.uname.nodename}}}')
-HISTORY=$(curl -s "$BASE_URL/api/history" | jq '{history: .history[-8:]}')
-DOMAINS=$(curl -s "$BASE_URL/api/stats/top_domains?blocked=true" | jq '{domains: .domains[0:15]}')
+HISTORY=$(curl -s "$BASE_URL/api/history" | jq '{history: .history[-4:]}')
+DOMAINS=$(curl -s "$BASE_URL/api/stats/top_domains?blocked=true" | jq '{domains: .domains[0:10]}')
 
 # Send Stats first
 echo "Sending Stats..."
@@ -353,9 +375,9 @@ echo "======================================"
 echo ""
 echo "Recommended: Run every 15 minutes"
 echo "This will update:"
-echo "  - Stats/System/Sensors: Every 15 min"
-echo "  - History: Every 30 min (alternating)"
-echo "  - Domains: Every 30 min (alternating)"
+echo "  - Stats/System/Sensors: Every 15 min (optimized)"
+echo "  - History: Every 30 min (4 data points)"
+echo "  - Domains: Every 30 min (top 10)"
 echo ""
 echo "Update frequency (in minutes) [default: 15]:"
 echo "(Choose: 5, 10, 15, 20, or 30)"
@@ -399,10 +421,11 @@ echo "  - Update frequency: Every $FREQUENCY minutes"
 echo ""
 echo "How it works:"
 echo "  - State file tracks alternating updates"
-echo "  - Every run sends Stats (always)"
-echo "  - Alternates between History and Domains"
+echo "  - Every run sends Stats (optimized for size)"
+echo "  - Alternates between History (4 points) and Domains (top 10)"
 echo "  - Uses deep_merge to update only changed data"
 echo "  - All output automatically logged to file"
+echo "  - Total payload optimized to stay under 2KB limit"
 echo ""
 echo "Useful commands:"
 echo "  - Manual run:       $SCRIPT_PATH"
