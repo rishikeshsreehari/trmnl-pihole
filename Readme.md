@@ -9,8 +9,8 @@ Display your [Pi-hole](https://pi-hole.net) stats on your TRMNL e-ink display.
 - **DNS Stats**: Total requests, blocked requests, blocking percentage, query frequency (queries/second)
 - **System Health**: CPU usage, RAM usage, temperature, uptime
 - **Connected Clients**: Number of devices using your Pi-hole
-- **Top Blocked Domains**: 15 most frequently blocked domains
-- **Historical Chart**: Last 8 data points showing blocked, cached, and forwarded queries
+- **Top Blocked Domains**: Most frequently blocked domains
+- **Historical Chart**: Recent data points showing blocked, cached, and forwarded queries
 
 ## Requirements
 
@@ -18,7 +18,7 @@ This guide assumes you already have [Pi-hole](https://pi-hole.net) installed and
 
 **You'll need:**
 - A Raspberry Pi (or similar device) with Pi-hole installed
-- SSH access to your Pi-hole
+- SSH access to your Pi-hole (root or sudo privileges required for installation)
 - A TRMNL account
 
 **Tested on:**
@@ -53,11 +53,13 @@ The installer creates a state file (`~/.pihole-trmnl-state`) that automatically 
 
 ### Optimized Payloads
 
-Uses TRMNL's `deep_merge` strategy for efficient updates:
-- **Stats payload**: ~1,350 bytes
-- **History payload**: ~1,120 bytes  
-- **Domains payload**: ~817 bytes
-- All under 2KB limit ✅
+Data is carefully optimized to stay within TRMNL's 2KB limit:
+- **Stats payload**: ~600 bytes (essential metrics only)
+- **History payload**: ~600 bytes (4 data points)
+- **Domains payload**: ~800 bytes (top 10 domains)
+- **Total combined**: ~1,700 bytes ✅ (well under 2KB)
+
+Uses TRMNL's `deep_merge` strategy for efficient updates.
 
 ## Installation
 
@@ -75,9 +77,9 @@ bash <(curl -fsSL https://raw.githubusercontent.com/rishikeshsreehari/trmnl-piho
 2. **Asks for your TRMNL webhook URL**
 3. **Asks for Pi-hole URL** - Defaults to `http://localhost` (works for 99% of setups)
 4. **Sends initial data** - Establishes complete data structure:
-   - Stats payload (1,358 bytes)
-   - History payload (1,121 bytes)
-   - Domains payload (817 bytes)
+   - Stats payload (~625 bytes)
+   - History payload (~605 bytes)
+   - Domains payload (~812 bytes)
 5. **Creates state file** - Starts alternating tracking
 6. **Sets up cron job** - Defaults to every 15 minutes (customizable)
 7. **Creates log file** - Track all updates at `~/trmnl-push.log`
@@ -155,12 +157,12 @@ HTTP Status: 200
 - Hostname, active clients
 
 **History Payload (every 30 min):**
-- Last 8 data points for chart
+- Last 4 data points for chart (optimized for size)
 - Blocked, cached, forwarded counts per interval
 
 **Domains Payload (every 30 min):**
-- Top 15 blocked domains with request counts
-
+- Top 10 blocked domains with request counts
+- 
 ## Troubleshooting
 
 ### Check if it's working
@@ -202,11 +204,11 @@ Should return JSON with Pi-hole stats. If this fails:
 
 ```json
 {
-  "IDX_0": {/* Pi-hole stats */},
+  "IDX_0": {/* Essential Pi-hole stats (queries, blocked, cached, percent) */},
   "IDX_1": {"system": {/* CPU, RAM, uptime */}},
   "IDX_2": {"sensors": {/* temperature */}},
-  "IDX_3": {"history": [/* 8 data points */]},
-  "IDX_4": {"domains": [/* 15 domains */]},
+  "IDX_3": {"history": [/* 4 data points */]},
+  "IDX_4": {"domains": [/* 10 domains */]},
   "IDX_5": {"host": {/* hostname */}}
 }
 ```
