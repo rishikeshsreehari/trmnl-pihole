@@ -89,10 +89,26 @@
       </span>
     
       <span class="value value--xsmall value--tnums">
-        {% if system.uptime < 3600 %}
-          {{ system.uptime | divided_by: 60 | round: 0 }}m
+        {% assign uptime_seconds = system.uptime %}
+        {% assign minutes = uptime_seconds | divided_by: 60 %}
+        {% assign hours = uptime_seconds | divided_by: 3600 %}
+        {% assign days = uptime_seconds | divided_by: 86400 %}
+        {% assign weeks = uptime_seconds | divided_by: 604800 %}
+        {% assign months = uptime_seconds | divided_by: 2592000 %}
+        {% assign years = uptime_seconds | divided_by: 31536000 %}
+        
+        {% if uptime_seconds < 3600 %}
+          {{ minutes | round: 0 }}m
+        {% elsif uptime_seconds < 86400 %}
+          {{ hours | round: 1 }}h
+        {% elsif uptime_seconds < 604800 %}
+          {{ days | round: 1 }}d
+        {% elsif uptime_seconds < 2592000 %}
+          {{ weeks | round: 1 }}w
+        {% elsif uptime_seconds < 31536000 %}
+          {{ months | round: 1 }}mo
         {% else %}
-          {{ system.uptime | divided_by: 3600 | round: 1 }}h
+          {{ years | round: 1 }}y
         {% endif %}
       </span>
     </div>
@@ -165,11 +181,14 @@
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function() {
     var chartData = [];
-
+    var utcOffset = {{ trmnl.user.utc_offset | default: 0 }}; // Get user's UTC offset in seconds
+    
     {% for h in history limit:24 %}
-      var timestamp = new Date({{ h.timestamp | times: 1000 }});
-      var hour = timestamp.getHours();
-      var minute = timestamp.getMinutes();
+      // Add UTC offset to convert to local time
+      var localTimestamp = ({{ h.timestamp }} + utcOffset) * 1000;
+      var timestamp = new Date(localTimestamp);
+      var hour = timestamp.getUTCHours(); // Use UTC methods since we already offset
+      var minute = timestamp.getUTCMinutes();
       var timeLabel = hour + ":" + (minute < 10 ? "0" : "") + minute;
       
       chartData.push({
@@ -179,11 +198,11 @@
         forwarded: {{ h.forwarded }}
       });
     {% endfor %}
-
+    
     var blockedData = chartData.map(function(d) { return [d.name, d.blocked]; });
     var cachedData = chartData.map(function(d) { return [d.name, d.cached]; });
     var forwardedData = chartData.map(function(d) { return [d.name, d.forwarded]; });
-
+    
     Highcharts.chart("{{ chart_id }}", {
       chart: {
         type: "column",

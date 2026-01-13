@@ -93,12 +93,28 @@
       Uptime&nbsp;
     </span>
     <span class="value value--xsmall value--tnums">
-      {% if system.uptime < 3600 %}
-        {{ system.uptime | divided_by: 60 | round: 0 }}m
-      {% else %}
-        {{ system.uptime | divided_by: 3600 | round: 1 }}h
-      {% endif %}
-    </span>
+  {% assign uptime_seconds = system.uptime %}
+  {% assign minutes = uptime_seconds | divided_by: 60 %}
+  {% assign hours = uptime_seconds | divided_by: 3600 %}
+  {% assign days = uptime_seconds | divided_by: 86400 %}
+  {% assign weeks = uptime_seconds | divided_by: 604800 %}
+  {% assign months = uptime_seconds | divided_by: 2592000 %}
+  {% assign years = uptime_seconds | divided_by: 31536000 %}
+  
+  {% if uptime_seconds < 3600 %}
+    {{ minutes | round: 0 }}m
+  {% elsif uptime_seconds < 86400 %}
+    {{ hours | round: 1 }}h
+  {% elsif uptime_seconds < 604800 %}
+    {{ days | round: 1 }}d
+  {% elsif uptime_seconds < 2592000 %}
+    {{ weeks | round: 1 }}w
+  {% elsif uptime_seconds < 31536000 %}
+    {{ months | round: 1 }}mo
+  {% else %}
+    {{ years | round: 1 }}y
+  {% endif %}
+</span>
   </div>
   
 </div>
@@ -202,8 +218,9 @@
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function() {
     var chartData = [];
-
-    {% for h in history limit:24 %}
+    
+    {% for h in history limit:10 %}
+      // Convert Unix timestamp to local time using browser's timezone
       var timestamp = new Date({{ h.timestamp | times: 1000 }});
       var hour = timestamp.getHours();
       var minute = timestamp.getMinutes();
@@ -216,11 +233,11 @@
         forwarded: {{ h.forwarded }}
       });
     {% endfor %}
-
+    
     var blockedData = chartData.map(function(d) { return [d.name, d.blocked]; });
     var cachedData = chartData.map(function(d) { return [d.name, d.cached]; });
     var forwardedData = chartData.map(function(d) { return [d.name, d.forwarded]; });
-
+    
     Highcharts.chart("{{ chart_id }}", {
       chart: {
         type: "column",
@@ -287,10 +304,11 @@
       xAxis: {
         type: "category",
         labels: {
-          style: { fontSize: "11px", color: "#000000" },
+          style: { fontSize: "14px", color: "#000000" },  // Increased from 11px to 14px
           padding: 5,
-          y: 20,
-          rotation: 0
+          rotation: -45,
+          align: 'right',
+          y: 10     
         },
         lineWidth: 0,
         tickWidth: 0,

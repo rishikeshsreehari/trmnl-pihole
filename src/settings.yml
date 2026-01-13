@@ -13,9 +13,12 @@ custom_fields:
   name: About This Plugin
   field_type: author_bio
   category: analytics,programming
-  description: Display real-time statistics from your <a href="https://pi-hole.net/">Pi-hole</a> network-wide ad blocker on your TRMNL device. Monitor DNS queries, blocked requests, system performance (CPU, RAM, temperature, uptime), query history charts, and top blocked domains - all updated automatically from your local Pi-hole instance.<br><br><strong>Setup Requirements:</strong><ul><li>A Pi-hole server running on your local network</li><li>Pi-hole API password authentication must be disabled</li><li>A device on your network to run the webhook script (can be the Pi-hole itself)</li><li>TRMNL+ subscription recommended for full features (uses ~3KB of 5KB webhook limit)</li></ul><br><strong>Installation:</strong> This plugin uses webhook strategy. You'll need to set up a simple bash script on your Pi-hole (or any device on your network) that pushes data to TRMNL every 15 minutes. Full setup instructions and the webhook script are available in the <a href="https://github.com/rishikeshsreehari/trmnl-pihole">GitHub repository</a>.<br><br>Contributions and suggestions are welcome! For issues or feature requests, please <a href="https://github.com/rishikeshsreehari/trmnl-pihole/issues">raise an issue on GitHub</a> or send an email.
+  description: Display real-time statistics from your <a href="https://pi-hole.net/">Pi-hole</a> network-wide ad blocker on your TRMNL device. Monitor DNS queries, blocked requests, system performance, query history charts, and top blocked domains.<br><br><strong>Requirements:</strong> Pi-hole device with SSH access (root or sudo access required), TRMNL webhook URL from plugin settings.<br><br><strong>Installation:</strong> Run the install script on your Pi-hole via SSH. Updates automatically every 15 minutes. Full instructions available in the <a href="https://github.com/rishikeshsreehari/trmnl-pihole">GitHub repository</a>.<br><br>For issues or suggestions, please <a href="https://github.com/rishikeshsreehari/trmnl-pihole/issues">raise an issue on GitHub</a> or send an email.
   github_url: https://github.com/rishikeshsreehari/trmnl-pihole
   learn_more_url: https://rishikeshs.com/projects/trmnl-pihole
   email_address: hello@rishikeshs.com
+- keyname: github
+  field_type: copyable_webhook_url
+  name: Webhook URL
 name: Pi-hole
 refresh_interval: 15
