@@ -68,8 +68,14 @@ WEBHOOK_URL="WEBHOOK_URL_PLACEHOLDER"
 # Pi-hole base URL
 BASE_URL="BASE_URL_PLACEHOLDER"
 
+# Log file path
+LOG_FILE="$HOME/trmnl-push.log"
+
 # State file to track what was sent last
 STATE_FILE="$HOME/.pihole-trmnl-state"
+
+# Redirect all output to log file AND terminal
+exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Function to send payload with detailed logging
 send_payload() {
@@ -349,8 +355,8 @@ fi
 # Remove any old cron jobs
 crontab -l 2>/dev/null | grep -v "push-pihole-to-trmnl.sh" | crontab - 2>/dev/null
 
-# Add new cron job
-(crontab -l 2>/dev/null; echo "*/$FREQUENCY * * * * $SCRIPT_PATH >> $LOG_PATH 2>&1") | crontab -
+# Add new cron job (no need for >> redirect since script handles it)
+(crontab -l 2>/dev/null; echo "*/$FREQUENCY * * * * $SCRIPT_PATH") | crontab -
 
 echo ""
 echo "✅ Cron job added! Updates every $FREQUENCY minutes."
@@ -360,7 +366,7 @@ echo "  - Stats update every $FREQUENCY min"
 echo "  - History/Domains alternate every $((FREQUENCY * 2)) min"
 echo "  - Total: $((60 / FREQUENCY * 2)) requests/hour"
 echo ""
-echo "📝 Logs saved to: $LOG_PATH"
+echo "📝 Logs automatically saved to: $LOG_PATH"
 
 echo ""
 echo "======================================"
@@ -372,6 +378,7 @@ echo ""
 echo "Configuration:"
 echo "  - Pi-hole URL: $BASE_URL"
 echo "  - State file: $STATE_FILE"
+echo "  - Log file: $LOG_PATH"
 echo "  - Update frequency: Every $FREQUENCY minutes"
 echo ""
 echo "How it works:"
@@ -379,6 +386,7 @@ echo "  - State file tracks alternating updates"
 echo "  - Every run sends Stats (always)"
 echo "  - Alternates between History and Domains"
 echo "  - Uses deep_merge to update only changed data"
+echo "  - All output automatically logged to file"
 echo ""
 echo "Useful commands:"
 echo "  - View logs:        tail -f $LOG_PATH"
