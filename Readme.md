@@ -228,6 +228,48 @@ TRMNL free tier: 12 requests/hour, 2KB per request
 - 2 webhooks per run × 4 runs/hour = 8 requests/hour
 - Leaves 4 requests/hour buffer for manual tests
 
+## Uninstalling
+
+To completely remove the Pi-hole plugin:
+
+### Quick Uninstall
+
+SSH into your Pi-hole and run:
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/rishikeshsreehari/trmnl-pihole/main/uninstall.sh)
+```
+
+### Manual Uninstall
+
+If you prefer to remove components manually:
+
+1. **Remove the cron job:**
+```bash
+crontab -e
+# Delete the line containing: ~/push-pihole-to-trmnl.sh
+```
+
+2. **Remove the script:**
+```bash
+rm ~/push-pihole-to-trmnl.sh
+```
+
+3. **Remove the state file:**
+```bash
+rm ~/.pihole-trmnl-state
+```
+
+4. **Remove the log file (optional):**
+```bash
+rm ~/trmnl-push.log
+```
+
+5. **Verify cron job is removed:**
+```bash
+crontab -l | grep pihole
+# Should return nothing
+```
+
 ## Contributing
 
 Contributions, ideas, and feedback are welcome! Feel free to open an issue or submit a pull request.
