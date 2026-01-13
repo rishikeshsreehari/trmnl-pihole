@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "======================================"
-echo "Pi-hole TRMNL Plugin Installer"
+echo "Pi-hole TRMNL Plugin Installer(v0.1.1)"
 echo "Optimized Edition"
 echo "======================================"
 echo ""
