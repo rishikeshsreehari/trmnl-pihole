@@ -18,6 +18,7 @@ This guide assumes you already have [Pi-hole](https://pi-hole.net) installed and
 
 **You'll need:**
 - A Raspberry Pi (or similar device) with Pi-hole installed
+- Pi-hole configured with local API access without a password 
 - SSH access to your Pi-hole (root or sudo privileges required for installation)
 - A TRMNL account
 
@@ -278,9 +279,14 @@ Contributions, ideas, and feedback are welcome! Feel free to open an issue or su
 
 ## Support
 
-Need help or want a custom TRMNL plugin? Reach out at [hello@rishikeshs.com](mailto:hello@rishikeshs.com)
+For issues or setup help, feel free to reach out via:
+- **Discord**: rishikeshs
+- **Email**: [hello@rishikeshs.com](mailto:hello@rishikeshs.com)
+- **GitHub Issues**: [Open an issue](https://github.com/rishikeshsreehari/trmnl-pihole/issues)
 
-If you find this useful support at: [r1l.in/s](https://r1l.in/s)
+Need a custom TRMNL plugin? Get in touch!
+
+If you find this useful, support at: [r1l.in/s](https://r1l.in/s)
 
 ## Credits
 
