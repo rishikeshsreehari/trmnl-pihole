@@ -24,7 +24,7 @@ This guide assumes you already have [Pi-hole](https://pi-hole.net) installed and
 
 **Tested on:**
 - Raspberry Pi 3B+ with DietPi (DietPi_RPi234-ARMv8-Bookworm.img.xz)
-- Raspberry Pi with Raspberry Pi OS
+- Raspberry Pi 4 with Raspberry Pi OS
 
 ## How It Works
 
