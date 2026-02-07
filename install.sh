@@ -29,9 +29,9 @@ if [ -z "$WEBHOOK_URL" ]; then
 fi
 
 # Validate webhook URL format
-if [[ ! "$WEBHOOK_URL" =~ ^https://usetrmnl\.com/api/custom_plugins/ ]]; then
+if [[ ! "$WEBHOOK_URL" =~ ^https://trmnl\.com/api/custom_plugins/ ]]; then
     echo "⚠️  Warning: URL doesn't look like a TRMNL webhook URL"
-    echo "Expected format: https://usetrmnl.com/api/custom_plugins/xxxxx-xxxx-xxxx"
+    echo "Expected format: https://trmnl.com/api/custom_plugins/xxxxx-xxxx-xxxx"
     echo ""
     read -p "Continue anyway? (y/n) " -n 1 -r
     echo ""
