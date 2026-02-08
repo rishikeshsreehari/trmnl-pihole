@@ -93,6 +93,11 @@ bash <(curl -fsSL https://raw.githubusercontent.com/rishikeshsreehari/trmnl-piho
 4. Copy the markup from `template.liquid` in this repository
 5. Copy your Webhook URL (looks like: `https://usetrmnl.com/api/custom_plugins/xxxxx-xxxx-xxxx`)
 
+### Installation Video
+
+Video instructions by RelfWolf: https://www.youtube.com/watch?v=OnRFtMqgquk
+
+
 ## After Installation
 
 **View logs:**
